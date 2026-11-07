@@ -67,6 +67,12 @@ On a Mac with Xcode, plus `meson`, `ninja`, `pkg-config`, `python3`, `xcodegen`,
 
 That produces `build/Husk.ipa`. Later app-only rebuilds: `./scripts/package_ipa.sh` → `~/Desktop/Husk.ipa`.
 
+### On GitHub Actions
+
+`.github/workflows/build-ipa.yml` builds `Husk.ipa` and `Husk.tipa` on every push to `main` (Actions › Build IPA › the run › Artifacts), and on demand with **Run workflow**. Pushing a tag that starts with `v` (for example `v3.4-w1`) also publishes both as a release.
+
+The app (Swift, the translation layer's C, the Rust pairing library) is compiled from the checkout. QEMU, ANGLE, MoltenVK, the PS4 layer, the Java runtime and the guest kernel are taken from the upstream release the commit descends from (`scripts/ci/stage_prebuilt_natives.sh`), since building them needs more time and disk than a hosted runner has. If `src/ios-jit`, `patches` or `src/java-framework` changed since that release, the run says so: those changes need `./scripts/ci_build.sh` on a Mac.
+
 ## Licence
 
 GPL-2.0-or-later. Husk links QEMU (GPLv2), so the shipped binary is a combined GPLv2 work. It cannot go on the App Store. See [docs/01-licensing.md](docs/01-licensing.md).
