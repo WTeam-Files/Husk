@@ -26,3 +26,6 @@ third_party/gpu/
 # local notes and editor rules, never part of the repo
 /Husk_*.MD
 /.cursor/
+
+# CI: the upstream IPA the native parts are staged from
+/.natives/

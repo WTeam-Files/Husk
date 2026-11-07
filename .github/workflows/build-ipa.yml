@@ -1,0 +1,150 @@
+name: Build IPA
+
+# Builds Husk.ipa (AltStore / SideStore) and Husk.tipa (TrollStore) on a hosted Mac.
+#
+# The app -- its Swift, the translation layer's C and the Rust pairing library -- is compiled from this checkout. The
+# heavy native parts (QEMU, ANGLE, MoltenVK, the PS4 layer, the Java runtime, Android's system files, the guest kernel)
+# are taken from the upstream Husk release this commit descends from: building them needs hours and tens of gigabytes
+# (scripts/ci_build.sh), more than a hosted runner has. See scripts/ci/stage_prebuilt_natives.sh.
+#
+# Every run uploads both files as an artifact. Pushing a tag such as v3.4-w1 also publishes them as a GitHub release.
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+    paths-ignore: ["**.md", "Screenshots/**", "docs/**", "showcase/**"]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      natives:
+        description: "Upstream release to take the native parts from (blank = the one this commit descends from)"
+        required: false
+        default: ""
+
+concurrency:
+  group: build-ipa-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  UPSTREAM: Leviidev/Husk
+
+jobs:
+  ipa:
+    runs-on: macos-26
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Select Xcode
+        run: |
+          XCODE="$(ls -d /Applications/Xcode_*.app | grep -viE 'beta|rc' | sort -V | tail -1)"
+          [ -n "$XCODE" ] || XCODE="$(ls -d /Applications/Xcode*.app | sort -V | tail -1)"
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+
+      - name: Tools
+        run: |
+          brew install xcodegen qemu
+          rustup target add aarch64-apple-ios
+          qemu-img --version | head -1
+          xcodegen --version
+
+      - name: Which upstream release has the native parts
+        id: natives
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WANT: ${{ inputs.natives }}
+        run: |
+          git fetch --quiet --force "https://github.com/$UPSTREAM.git" 'refs/tags/*:refs/tags/*' || true
+          TAG="$WANT"
+          if [ -z "$TAG" ]; then
+            # The newest numbered release that this commit contains: its natives were built from the same sources.
+            TAG="$(git tag --merged HEAD --sort=-v:refname | grep -E '^[0-9]+(\.[0-9]+)+$' | head -1 || true)"
+          fi
+          if [ -z "$TAG" ]; then
+            TAG="$(gh release view -R "$UPSTREAM" --json tagName -q .tagName)"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Native parts from $UPSTREAM release **$TAG**" >> "$GITHUB_STEP_SUMMARY"
+          # Native sources changed since that release are NOT in this build: say so rather than ship them silently.
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            CHANGED="$(git diff --name-only "$TAG" HEAD -- src/ios-jit patches src/java-framework scripts/integrate_husk.sh | head -20)"
+            if [ -n "$CHANGED" ]; then
+              echo "::warning::Native sources changed since $TAG and are not rebuilt here: $(echo $CHANGED | tr '\n' ' ')"
+              { echo; echo "Changed since $TAG and not rebuilt (needs scripts/ci_build.sh on a Mac):"; echo '```'; echo "$CHANGED"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+            fi
+          fi
+
+      - name: Cache the upstream IPA
+        id: ipa-cache
+        uses: actions/cache@v4
+        with:
+          path: .natives/Husk.ipa
+          key: husk-natives-${{ steps.natives.outputs.tag }}
+
+      - name: Download the upstream IPA
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .natives
+          gh release download "${{ steps.natives.outputs.tag }}" -R "$UPSTREAM" -p Husk.ipa -D .natives --clobber
+
+      - name: Stage native parts
+        run: bash scripts/ci/stage_prebuilt_natives.sh .natives/Husk.ipa
+
+      - name: Cache Rust
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src/rppairing-ios/target
+          key: rppairing-${{ hashFiles('src/rppairing-ios/Cargo.lock') }}
+
+      - name: On-device pairing library (Rust)
+        run: bash scripts/build_rppairing_ios.sh
+
+      - name: Build and package
+        env:
+          DD: ${{ runner.temp }}/husk_dd
+        run: |
+          mkdir -p build
+          bash scripts/package_ipa.sh build/Husk.ipa
+          bash scripts/package_ipa.sh --trollstore build/Husk.tipa
+          ls -lh build/Husk.ipa build/Husk.tipa
+          echo "IPA: $(du -h build/Husk.ipa | cut -f1), TIPA: $(du -h build/Husk.tipa | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Compiler errors
+        if: failure()
+        run: |
+          LOG="${{ runner.temp }}/husk_dd/build.log"
+          [ -f "$LOG" ] || exit 0
+          grep -E "error:|warning: .*deprecated" "$LOG" | grep -E "error:" | sort -u | head -60
+          tail -40 "$LOG"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Husk-${{ github.sha }}
+          path: |
+            build/Husk.ipa
+            build/Husk.tipa
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" build/Husk.ipa build/Husk.tipa \
+            --repo "$GITHUB_REPOSITORY" --title "Husk $GITHUB_REF_NAME" \
+            --notes "Built from ${GITHUB_SHA::7}, native parts from $UPSTREAM ${{ steps.natives.outputs.tag }}." \
+            || gh release upload "$GITHUB_REF_NAME" build/Husk.ipa build/Husk.tipa --repo "$GITHUB_REPOSITORY" --clobber
