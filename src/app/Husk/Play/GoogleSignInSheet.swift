@@ -40,7 +40,7 @@ struct GoogleSignInSheet: View {
                             .foregroundStyle(Theme.text)
                     }
                     .padding(24)
-                    .background(Theme.surfaceHigh, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .background(Theme.surfaceHigh, in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
                     .shadow(radius: 20)
                 } else if webLoading {
                     ProgressView("Loading Google Sign-In…")

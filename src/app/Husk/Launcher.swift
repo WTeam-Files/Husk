@@ -347,9 +347,9 @@ private struct RecentlyPlayedCard: View {
             }
             .frame(height: 180)
             .frame(maxWidth: .infinity)
-            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).stroke(Console.outline, lineWidth: 0.5))
-            .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous).stroke(Console.outline, lineWidth: 0.5))
+            .contentShape(RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous))
         }
         .buttonStyle(CardButtonStyle())
         .libraryItemMenu(item) { router.home.append($0) }
@@ -486,9 +486,9 @@ private struct WideCard: View {
             .padding(12)
         }
         .frame(width: 250, height: 140)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Console.hairline, lineWidth: 0.5))
-        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous).stroke(Console.hairline, lineWidth: 0.5))
+        .contentShape(RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
     }
 }
 
@@ -500,7 +500,7 @@ struct ConsolePlayButtonStyle: ButtonStyle {
             .foregroundStyle(Theme.accent.isLight ? Color.black : Color.white)
             .frame(maxWidth: .infinity)
             .frame(height: 52)
-            .background(Theme.accent, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .background(Theme.accent, in: RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
             .opacity(configuration.isPressed ? 0.85 : 1)
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
             .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
@@ -521,7 +521,7 @@ private struct HomeMoreButton: View {
                 .font(.system(size: 18, weight: .bold))
                 .foregroundStyle(Console.text)
                 .frame(width: 52, height: 52)
-                .background(Console.raised, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .background(Console.raised, in: RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
         }
         .accessibilityLabel("More for \(item.title)")
         .removeItemDialog(item, isPresented: $confirmRemove)
@@ -599,8 +599,8 @@ private struct JITNotice: View {
                     }
                 }
                 .padding(.horizontal, 12).padding(.vertical, 10)
-                .background(Color.black.opacity(0.55), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Console.hairline, lineWidth: 0.5))
+                .background(Color.black.opacity(0.55), in: RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous).stroke(Console.hairline, lineWidth: 0.5))
             }
             .buttonStyle(CardButtonStyle())
             .disabled(jit.busy)
@@ -610,8 +610,8 @@ private struct JITNotice: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
-                    .background(Color.black.opacity(0.55), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Console.hairline, lineWidth: 0.5))
+                    .background(Color.black.opacity(0.55), in: RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous).stroke(Console.hairline, lineWidth: 0.5))
             }
             .buttonStyle(CardButtonStyle())
             if let error = jit.error {
@@ -654,8 +654,8 @@ private struct DownloadsNotice: View {
                     Image(systemName: "chevron.right").font(.system(size: 12, weight: .bold)).foregroundStyle(Console.textDim)
                 }
                 .padding(.horizontal, 12).padding(.vertical, 10)
-                .background(Color.black.opacity(0.55), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Console.hairline, lineWidth: 0.5))
+                .background(Color.black.opacity(0.55), in: RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous).stroke(Console.hairline, lineWidth: 0.5))
             }
             .buttonStyle(CardButtonStyle())
         }
@@ -672,7 +672,7 @@ private struct WelcomeCard: View {
                 .font(.system(size: 28, weight: .semibold))
                 .foregroundStyle(Console.text)
                 .frame(width: 60, height: 60)
-                .background(Console.raised, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .background(Console.raised, in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
             VStack(alignment: .leading, spacing: 6) {
                 Text("Add your first game")
                     .font(.system(size: 26, weight: .heavy))
@@ -688,7 +688,7 @@ private struct WelcomeCard: View {
                 .buttonStyle(ConsolePlayButtonStyle())
         }
         .padding(20)
-        .background(Console.card, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .background(Console.card, in: RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous))
     }
 }
 
@@ -877,7 +877,7 @@ struct LibraryScreen: View {
                         .foregroundStyle(Console.textDim)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(16)
-                        .background(Console.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .background(Console.card, in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
                 } else if iconSize == .list {
                     LazyVStack(spacing: 2) {
                         ForEach(items) { item in
@@ -1141,7 +1141,7 @@ struct BusyStrip: View {
             Spacer(minLength: 0)
         }
         .padding(14)
-        .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
     }
 }
 
@@ -1172,7 +1172,7 @@ struct SearchField: View {
             }
             .padding(.horizontal, 10)
             .frame(height: 38)
-            .background(Color(uiColor: .tertiarySystemFill), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(Color(uiColor: .tertiarySystemFill), in: RoundedRectangle(cornerRadius: Theme.Curve.small, style: .continuous))
             if focused {
                 Button("Cancel") { text = ""; focused = false }
                     .transition(.move(edge: .trailing).combined(with: .opacity))

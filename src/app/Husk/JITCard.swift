@@ -74,7 +74,7 @@ struct JITCard: View {
             }
         }
         .padding(12)
-        .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
     }
 
     private var explanation: String {

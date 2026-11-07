@@ -43,7 +43,7 @@ private struct PageHero<Action: View>: View {
                 .padding(16)
             }
             .frame(height: 260)
-            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous))
             action
             if !facts.isEmpty {
                 HStack(alignment: .top) {
@@ -96,7 +96,7 @@ private struct BigButton: View {
                 .frame(height: 50)
                 .foregroundStyle(prominent ? Color.white : Color.accentColor)
                 .background(prominent ? Color.accentColor : Color.accentColor.opacity(0.14),
-                            in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+                            in: RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
         }
         .buttonStyle(CardButtonStyle())
     }
@@ -642,7 +642,7 @@ struct AndroidAppPage: View {
                     .font(.system(.headline, design: .rounded))
                     .frame(maxWidth: .infinity).frame(height: 50)
                     .foregroundStyle(.white)
-                    .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+                    .background(Color.accentColor, in: RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
             }
             .buttonStyle(CardButtonStyle())
         }
@@ -667,6 +667,7 @@ struct AndroidSystemPage: View {
     @ObservedObject private var host = AndroidHost.shared
     @ObservedObject private var router = Router.shared
     @ObservedObject private var jit = JITCoordinator.shared
+    @State private var choosing = false
 
     private var running: Bool { router.androidStarted }
 
@@ -701,6 +702,9 @@ struct AndroidSystemPage: View {
                 NavigationLink { InputSettings() } label: { Label("Input", systemImage: "hand.tap") }
                 NavigationLink { NetworkSettings() } label: { Label("Network", systemImage: "globe") }
                 NavigationLink { SavedMachineSettings() } label: { Label("Saved Machine", systemImage: "externaldrive") }
+                if !running, guest.state == .ready {
+                    Button { choosing = true } label: { Label("Download a Different Image…", systemImage: "square.stack.3d.down.right") }
+                }
             }
 
         }
@@ -708,6 +712,7 @@ struct AndroidSystemPage: View {
         .navigationTitle("Android")
         .navigationBarTitleDisplayMode(.inline)
         .animation(.easeInOut(duration: 0.2), value: status)
+        .sheet(isPresented: $choosing) { GuestDownloadPicker() }
     }
 
     private var status: String {
@@ -718,8 +723,11 @@ struct AndroidSystemPage: View {
         switch guest.state {
         case .missing: return "Not downloaded yet"
         case .downloading(_, let received, let total):
-            return "Downloading · \(bytes(received)) of \(total > 0 ? bytes(total) : "…")"
-        case .installing: return "Installing…"
+            return (guest.isFetchingSnapshot ? "Downloading snapshot · " : "Downloading · ")
+                + "\(bytes(received)) of \(total > 0 ? bytes(total) : "…")"
+        case .paused(_, let received, let total):
+            return "Paused · \(bytes(received)) of \(total > 0 ? bytes(total) : "…")"
+        case .installing: return guest.isFetchingSnapshot ? "Unpacking the snapshot…" : "Installing…"
         case .failed: return "Something went wrong"
         case .ready: return Launcher.jitOn ? "Ready to start" : "Needs JIT to start"
         }
@@ -728,13 +736,17 @@ struct AndroidSystemPage: View {
     private var progress: Double? {
         if running, !host.isReady, runner.bootProgress > 0 { return Double(runner.bootProgress) / 100 }
         if !running, case .downloading(let p, _, _) = guest.state { return p }
+        if !running, case .paused(let p, _, _) = guest.state { return p }
         return nil
     }
 
     private var note: String? {
         guard !running else { return nil }
         switch guest.state {
-        case .missing: return "Husk's Android runtime is about 760 MB. Android itself follows once it is installed."
+        case .missing: return "Choose which Android image to download, and whether to add the pre-booted snapshot. "
+                            + "Downloads can be paused and resumed, even after closing Husk."
+        case .paused: return guest.downloadNote ?? "Paused. Resume continues from where it stopped."
+        case .downloading: return "You can pause and come back later; nothing downloaded so far is lost."
         case .failed(let message): return message
         default: return nil
         }
@@ -751,17 +763,24 @@ struct AndroidSystemPage: View {
         } else {
             switch guest.state {
             case .missing:
-                BigButton(title: "Download Android", systemImage: "arrow.down.circle") {
-                    // Claim the JIT region before the download: it takes a while, and StikDebug lets go by the end of it.
-                    JITBootstrap.prewarm()
-                    guest.download()
-                }
+                BigButton(title: "Download Android…", systemImage: "arrow.down.circle") { choosing = true }
             case .downloading:
-                BigButton(title: "Cancel Download", systemImage: "xmark", prominent: false) { guest.cancel() }
+                HStack(spacing: 10) {
+                    BigButton(title: "Pause", systemImage: "pause.fill") { guest.pause() }
+                    BigButton(title: "Cancel", systemImage: "xmark", prominent: false) { guest.cancel() }
+                }
+            case .paused:
+                HStack(spacing: 10) {
+                    BigButton(title: "Resume", systemImage: "play.fill") { guest.resume() }
+                    BigButton(title: "Cancel", systemImage: "xmark", prominent: false) { guest.cancel() }
+                }
             case .installing:
                 ProgressView().frame(height: 50)
             case .failed:
-                BigButton(title: "Try Again", systemImage: "arrow.clockwise") { JITBootstrap.prewarm(); guest.download() }
+                HStack(spacing: 10) {
+                    BigButton(title: "Try Again", systemImage: "arrow.clockwise") { JITBootstrap.prewarm(); guest.download() }
+                    BigButton(title: "Choose…", systemImage: "list.bullet", prominent: false) { choosing = true }
+                }
             case .ready:
                 if jit.busy {
                     HStack(spacing: 10) { ProgressView(); Text(jit.status ?? "Turning on JIT…").foregroundStyle(.secondary) }

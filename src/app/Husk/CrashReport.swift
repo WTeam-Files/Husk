@@ -200,7 +200,7 @@ struct CrashReportSheet: View {
                                 .textSelection(.enabled)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(10)
-                                .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 10))
+                                .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: Theme.Curve.small, style: .continuous))
                         }
                     }
 

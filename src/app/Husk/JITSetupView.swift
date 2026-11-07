@@ -116,7 +116,7 @@ struct JITSetupFlow: View {
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(Theme.accent)
                     .frame(width: 34, height: 34)
-                    .background(Theme.accentSoft, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .background(Theme.accentSoft, in: RoundedRectangle(cornerRadius: Theme.Curve.small, style: .continuous))
                 VStack(alignment: .leading, spacing: 3) {
                     Text(title).font(.system(size: 16, weight: .semibold)).foregroundStyle(Theme.text)
                     Text(detail).font(.system(size: 13)).foregroundStyle(Theme.textDim)
@@ -433,7 +433,7 @@ struct JITSetupFlow: View {
                         .font(.system(size: 26, weight: .semibold))
                         .foregroundStyle(Theme.accent)
                         .frame(width: 56, height: 56)
-                        .background(Theme.accentSoft, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .background(Theme.accentSoft, in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
                     Text(title).font(.system(size: 28, weight: .semibold)).foregroundStyle(Theme.text)
                     Text(subtitle).font(.system(size: 15)).foregroundStyle(Theme.textDim)
                         .fixedSize(horizontal: false, vertical: true)

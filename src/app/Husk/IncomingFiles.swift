@@ -294,7 +294,7 @@ struct IncomingChooser: View {
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(Color.accentColor)
                     .frame(width: 44, height: 44)
-                    .background(Color.accentColor.opacity(0.14), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .background(Color.accentColor.opacity(0.14), in: RoundedRectangle(cornerRadius: Theme.Curve.small, style: .continuous))
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title).font(.headline).foregroundStyle(.primary)
                     Text(detail).font(.subheadline).foregroundStyle(.secondary)
@@ -304,7 +304,7 @@ struct IncomingChooser: View {
                 Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
             }
             .padding(14)
-            .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
         }
         .buttonStyle(CardButtonStyle())
     }

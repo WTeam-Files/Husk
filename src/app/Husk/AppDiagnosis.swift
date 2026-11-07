@@ -270,7 +270,7 @@ struct AppDiagnosisCard: View {
             Spacer(minLength: 0)
         }
         .padding(14)
-        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
     }
 }
 
@@ -298,7 +298,7 @@ struct AppStoppedOverlay: View {
             }
             .padding(18)
             .frame(maxWidth: 440)
-            .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous))
             .padding(24)
         }
         .task { report = AppDiagnosis.writeReport(app: app, diagnosis: diagnosis) }

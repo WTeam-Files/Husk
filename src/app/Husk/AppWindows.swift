@@ -128,7 +128,7 @@ private struct AppWindow: View {
         .clipShape(RoundedRectangle(cornerRadius: windows.maximized ? 0 : 12, style: .continuous))
         .overlay {
             if !windows.maximized {
-                RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Color.primary.opacity(0.15), lineWidth: 0.5)
+                RoundedRectangle(cornerRadius: Theme.Curve.small, style: .continuous).strokeBorder(Color.primary.opacity(0.15), lineWidth: 0.5)
             }
         }
         .overlay(alignment: .bottomTrailing) { if !windows.maximized { resizeHandle } }
@@ -276,8 +276,8 @@ private struct WindowDock: View {
         let y = min(max(windows.dockY * container.height, size), container.height - size)
         ItemIcon(item: .game(app), size: size - 12)
             .padding(6)
-            .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).strokeBorder(Color.primary.opacity(0.12), lineWidth: 0.5))
+            .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous).strokeBorder(Color.primary.opacity(0.12), lineWidth: 0.5))
             .shadow(color: .black.opacity(0.3), radius: 10, y: 4)
             .position(x: x + drag.width, y: y + drag.height)
             .onTapGesture { windows.restore() }

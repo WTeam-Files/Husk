@@ -220,7 +220,7 @@ struct ScreenshotThumb: View {
                 Color(uiColor: .secondarySystemBackground).frame(width: height * 16 / 9, height: height)
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
         .task(id: path) {
             if let hit = IconCache.shared.cached(path, pixels: 700) { image = hit; return }
             let loaded = await IconCache.shared.load(path, pixels: 700)

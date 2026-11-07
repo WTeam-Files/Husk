@@ -46,7 +46,7 @@ struct SettingsTab: View {
                                 Text("Use Husk while an app runs").font(.caption).foregroundStyle(.secondary).lineLimit(1)
                             }
                         } icon: {
-                            RoundedRectangle(cornerRadius: 7, style: .continuous)
+                            RoundedRectangle(cornerRadius: Theme.Curve.icon, style: .continuous)
                                 .fill(Color.purple.huskGradient)
                                 .frame(width: 30, height: 30)
                                 .overlay {
@@ -71,7 +71,7 @@ struct SettingsTab: View {
                                 Text("After playing, once per game per update").font(.caption).foregroundStyle(.secondary).lineLimit(1)
                             }
                         } icon: {
-                            RoundedRectangle(cornerRadius: 7, style: .continuous)
+                            RoundedRectangle(cornerRadius: Theme.Curve.icon, style: .continuous)
                                 .fill(Color.green.huskGradient)
                                 .frame(width: 30, height: 30)
                                 .overlay {
@@ -140,7 +140,7 @@ struct SettingsTab: View {
                     Text(subtitle).font(.caption).foregroundStyle(.secondary).lineLimit(1)
                 }
             } icon: {
-                RoundedRectangle(cornerRadius: 7, style: .continuous)
+                RoundedRectangle(cornerRadius: Theme.Curve.icon, style: .continuous)
                     .fill(tint.huskGradient)
                     .frame(width: 30, height: 30)
                     .overlay {
@@ -1005,8 +1005,8 @@ struct AppearanceSettings: View {
                                     Image(uiImage: art)
                                         .resizable().scaledToFit()
                                         .frame(width: 60, height: 60)
-                                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                                        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                        .clipShape(RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
+                                        .overlay(RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous)
                                             .strokeBorder(appIcon == icon ? Color.accentColor : .clear, lineWidth: 3))
                                 }
                                 Text(icon.title)

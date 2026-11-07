@@ -24,7 +24,7 @@ struct ImportView: View {
                     }
                     .padding(16)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Console.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .background(Console.card, in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
 
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Or get it from").font(.system(size: 15, weight: .semibold)).foregroundStyle(Console.text)
@@ -63,15 +63,15 @@ struct ImportView: View {
             Button { dismiss(); router.addSomething() } label: {
                 Text("Select File").font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
                     .padding(.horizontal, 28).frame(height: 44)
-                    .background(Console.raised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .background(Console.raised, in: RoundedRectangle(cornerRadius: Theme.Curve.small, style: .continuous))
             }
             .buttonStyle(CardButtonStyle())
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 34)
         .background(dropping ? Theme.accent.opacity(0.12) : Console.card.opacity(0.4),
-                    in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous)
                     .strokeBorder(dropping ? Theme.accent : Console.outline, style: StrokeStyle(lineWidth: 1.2, dash: [6, 5])))
         .onDrop(of: [.fileURL, .item], isTargeted: $dropping) { providers in
             for p in providers {
@@ -104,7 +104,7 @@ struct ImportView: View {
                 Image(systemName: "chevron.right").font(.system(size: 12, weight: .bold)).foregroundStyle(Console.textDim)
             }
             .padding(.horizontal, 14).frame(height: 52)
-            .background(Console.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .background(Console.card, in: RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
         }
         .buttonStyle(CardButtonStyle())
     }

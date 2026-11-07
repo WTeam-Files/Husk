@@ -77,7 +77,7 @@ struct ProfileView: View {
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundStyle(a.unlocked ? Theme.accent : Console.textDim)
                                 .frame(width: 44, height: 44)
-                                .background(Console.raised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                .background(Console.raised, in: RoundedRectangle(cornerRadius: Theme.Curve.small, style: .continuous))
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(a.title).font(.system(size: 15, weight: .semibold)).foregroundStyle(Console.text)
                                 Text(a.detail).font(.system(size: 12)).foregroundStyle(Console.textDim)
@@ -85,7 +85,7 @@ struct ProfileView: View {
                             Spacer(minLength: 0)
                         }
                         .padding(12)
-                        .background(Console.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .background(Console.card, in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
                         .opacity(a.unlocked ? 1 : 0.6)
                     }
                 }
@@ -109,7 +109,7 @@ struct ProfileView: View {
         return VStack(alignment: .leading, spacing: 6) {
             Group {
                 if let here { ItemIcon(item: here, size: 96) } else {
-                    RoundedRectangle(cornerRadius: 22, style: .continuous).fill(Console.raised).frame(width: 96, height: 96)
+                    RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous).fill(Console.raised).frame(width: 96, height: 96)
                         .overlay(Image(systemName: "gamecontroller.fill").foregroundStyle(Console.textDim))
                 }
             }
@@ -146,7 +146,7 @@ struct SignInView: View {
                     SecureField("Password", text: $password)
                         .textContentType(creating ? .newPassword : .password)
                         .padding(.horizontal, 14).frame(height: 48)
-                        .background(Console.card, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .background(Console.card, in: RoundedRectangle(cornerRadius: Theme.Curve.small, style: .continuous))
                 }
                 if let error { Text(error).font(.footnote).foregroundStyle(.orange).multilineTextAlignment(.center) }
                 Button { Task { await submit() } } label: {
@@ -169,7 +169,7 @@ struct SignInView: View {
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
             .padding(.horizontal, 14).frame(height: 48)
-            .background(Console.card, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(Console.card, in: RoundedRectangle(cornerRadius: Theme.Curve.small, style: .continuous))
     }
 
     private func submit() async {

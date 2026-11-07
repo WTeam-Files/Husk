@@ -14,10 +14,11 @@ import UIKit
 /// `GuestControl`), which is drawn flat and always dark: it floats over a picture of another phone.
 enum Theme {
     /// The page behind grouped content.
-    static let bgUI = UIColor.systemGroupedBackground
+    /// The same page and card colours as the console look (Console), so screens drawn either way match.
+    static let bgUI = Console.pageUI
     static let bg = Color(uiColor: bgUI)
     /// Cards, rows, anything holding content.
-    static let surface = Color(uiColor: .secondarySystemGroupedBackground)
+    static let surface = Console.card
     /// One step further up: wells, chips, the things that sit on a card.
     static let surfaceHigh = Color(uiColor: .tertiarySystemFill)
     /// The edge that separates a surface from the page.
@@ -78,8 +79,25 @@ enum Theme {
         }
     }
 
-    static let cardCorner: CGFloat = 14
-    static let rowCorner: CGFloat = 12
+    /// Every box in the app is one of these curves, always drawn `.continuous` (the squircle iOS draws its own icons and
+    /// sheets with) so corners flow into the sides instead of meeting them at an arc's edge.
+    enum Curve {
+        /// Big containers: an item's hero artwork, Home's cards, sheets' panels.
+        static let card: CGFloat = 26
+        /// Tiles and wells inside a page: covers in the grid, grouped rows drawn by hand.
+        static let tile: CGFloat = 22
+        /// Buttons and fields: Play, the page's main button, toasts, controls over the guest.
+        static let control: CGFloat = 18
+        /// Small things: chips that are not capsules, thumbnails, badges.
+        static let small: CGFloat = 14
+        /// The 30-point icon squares in Settings' rows.
+        static let icon: CGFloat = 9
+        /// An app icon of the given size: Apple's own icon proportion.
+        static func appIcon(_ size: CGFloat) -> CGFloat { size * 0.225 }
+    }
+
+    static let cardCorner: CGFloat = Curve.card
+    static let rowCorner: CGFloat = Curve.control
 
     static var backdrop: some View { bg.ignoresSafeArea() }
 }
@@ -87,9 +105,18 @@ enum Theme {
 extension View {
     /// A container for content that is not a list row: a surface on the grouped page, as the system draws one.
     @ViewBuilder
-    func huskCard<S: Shape>(_ shape: S, high: Bool = false) -> some View {
+    func huskCard<S: InsettableShape>(_ shape: S, high: Bool = false) -> some View {
         self.background(high ? Theme.surfaceHigh : Theme.surface, in: shape)
+            .overlay(shape.strokeBorder(Console.outline, lineWidth: 0.5))
             .snowCap()
+    }
+
+    /// A curved box: the card colour, the app's card curve and a hairline edge, clipped so pictures inside follow the curve.
+    func huskBox(_ radius: CGFloat = Theme.Curve.card) -> some View {
+        let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
+        return self.background(Console.card, in: shape)
+            .clipShape(shape)
+            .overlay(shape.strokeBorder(Console.outline, lineWidth: 0.5))
     }
 
     func huskCard(high: Bool = false) -> some View {
@@ -131,7 +158,7 @@ struct PrimaryButtonStyle: ButtonStyle {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 15)
             .background(enabled ? Theme.accent : Theme.surfaceHigh,
-                        in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+                        in: RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
             .opacity(configuration.isPressed ? 0.85 : 1)
             .scaleEffect(configuration.isPressed ? 0.985 : 1)
             .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
@@ -253,7 +280,7 @@ struct HuskRow: View {
                 .foregroundStyle(tint)
                 .frame(width: 34, height: 34)
                 .background(Theme.surfaceHigh,
-                            in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                            in: RoundedRectangle(cornerRadius: Theme.Curve.small, style: .continuous))
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.system(size: 15, weight: .medium))

@@ -877,8 +877,18 @@ final class DownloadKeepAlive {
     }
 
     private var wanted = false
+    /// Two things download: Downloads' jobs and the Android image (GuestImage). Either keeps the app alive; neither turns
+    /// the other's off.
+    private var forJobs = false
+    private var forGuest = false
 
-    func set(_ on: Bool) {
+    func set(_ on: Bool) { forJobs = on; apply() }
+
+    /// The Android image's download.
+    func setGuest(_ on: Bool) { forGuest = on; apply() }
+
+    private func apply() {
+        let on = forJobs || forGuest
         guard on != wanted else { return }
         wanted = on
         if on { startEngine() } else { stopEngine() }

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "about": "APK repositories Husk's Discover adds by itself. Any F-Droid index-v1 or Husk source URL works. Adding one here reaches existing installs on their next launch; removing one does not remove it from phones.",
+  "sources": [
+    {
+      "name": "F-Droid",
+      "url": "https://f-droid.org/repo/index-v1.json",
+      "description": "The main catalogue of free and open-source Android apps."
+    },
+    {
+      "name": "IzzyOnDroid",
+      "url": "https://apt.izzysoft.de/fdroid/repo/index-v1.json",
+      "description": "Over a thousand open-source apps, often newer than F-Droid's builds."
+    },
+    {
+      "name": "Husk Essentials",
+      "url": "https://raw.githubusercontent.com/WTeam-Files/Husk/main/catalog/source.json",
+      "description": "App stores and essentials picked for Husk, such as F-Droid and Aurora Store."
+    },
+    {
+      "name": "Guardian Project",
+      "url": "https://guardianproject.info/fdroid/repo/index-v1.json",
+      "description": "Privacy and security apps: Orbot, Tor Browser and more."
+    },
+    {
+      "name": "microG",
+      "url": "https://microg.org/fdroid/repo/index-v1.json",
+      "description": "Open replacements for Google Play Services."
+    },
+    {
+      "name": "NewPipe",
+      "url": "https://archive.newpipe.net/fdroid/repo/index-v1.json",
+      "description": "The NewPipe video player, straight from its developers."
+    },
+    {
+      "name": "Bitwarden",
+      "url": "https://mobileapp.bitwarden.com/fdroid/repo/index-v1.json",
+      "description": "The Bitwarden password manager."
+    },
+    {
+      "name": "Briar",
+      "url": "https://briarproject.org/fdroid/repo/index-v1.json",
+      "description": "Briar, peer-to-peer messaging."
+    },
+    {
+      "name": "Molly",
+      "url": "https://molly.im/fdroid/foss/fdroid/repo/index-v1.json",
+      "description": "Molly, a hardened Signal client."
+    },
+    {
+      "name": "Session",
+      "url": "https://fdroid.getsession.org/fdroid/repo/index-v1.json",
+      "description": "Session, the onion-routed messenger."
+    },
+    {
+      "name": "Threema",
+      "url": "https://releases.threema.ch/fdroid/repo/index-v1.json",
+      "description": "Threema Libre."
+    },
+    {
+      "name": "KDE",
+      "url": "https://cdn.kde.org/android/stable-releases/fdroid/repo/index-v1.json",
+      "description": "KDE's Android apps, such as KDE Connect."
+    },
+    {
+      "name": "LibRetro",
+      "url": "https://fdroid.libretro.com/repo/index-v1.json",
+      "description": "RetroArch and its emulator cores."
+    },
+    {
+      "name": "Metatrans Apps",
+      "url": "https://fdroid.metatransapps.com/fdroid/repo/index-v1.json",
+      "description": "Chess and puzzle games."
+    },
+    {
+      "name": "SpiritCroc",
+      "url": "https://s2.spiritcroc.de/fdroid/repo/index-v1.json",
+      "description": "SchildiChat and other apps."
+    },
+    {
+      "name": "PurpleI2P",
+      "url": "https://fdroid.i2pd.xyz/fdroid/repo/index-v1.json",
+      "description": "The i2pd router."
+    },
+    {
+      "name": "Monerujo",
+      "url": "https://f-droid.monerujo.io/fdroid/repo/index-v1.json",
+      "description": "Monerujo, a Monero wallet."
+    },
+    {
+      "name": "Cake Wallet",
+      "url": "https://fdroid.cakelabs.com/fdroid/repo/index-v1.json",
+      "description": "Cake Wallet and Monero.com."
+    },
+    {
+      "name": "Kali NetHunter",
+      "url": "https://store.nethunter.com/repo/index-v1.json",
+      "description": "Kali NetHunter's security and network tools."
+    }
+  ]
+}

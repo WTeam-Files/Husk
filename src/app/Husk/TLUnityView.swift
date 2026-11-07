@@ -991,7 +991,7 @@ struct TLCocosAttemptView: View {
             .buttonStyle(.bordered)
         }
         .padding(16)
-        .background(.black.opacity(0.75), in: RoundedRectangle(cornerRadius: 16))
+        .background(.black.opacity(0.75), in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
         .font(.system(size: 13, weight: .semibold))
     }
 

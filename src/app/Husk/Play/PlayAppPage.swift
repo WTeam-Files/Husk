@@ -62,8 +62,8 @@ struct PlayAppDetailSheet: View {
                 if let image = phase.image { image.resizable().scaledToFill() } else { Console.raised }
             }
             .frame(width: 96, height: 96)
-            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).stroke(Console.outline, lineWidth: 0.5))
+            .clipShape(RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous).stroke(Console.outline, lineWidth: 0.5))
 
             VStack(alignment: .leading, spacing: 5) {
                 Text(app.title)
@@ -108,7 +108,7 @@ struct PlayAppDetailSheet: View {
                     if let progress { ProgressView(value: progress).tint(Theme.accent) } else { ProgressView().frame(maxWidth: .infinity) }
                 }
                 .padding(14)
-                .background(Console.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .background(Console.card, in: RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
             } else {
                 Button {
                     manager.downloadAndInstall(app: app)
@@ -119,7 +119,7 @@ struct PlayAppDetailSheet: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 48)
-                        .background(Theme.accent, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                        .background(Theme.accent, in: RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
                 }
                 .buttonStyle(CardButtonStyle())
             }
@@ -155,8 +155,8 @@ struct PlayAppDetailSheet: View {
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 8)
-        .background(Console.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Console.outline, lineWidth: 0.5))
+        .background(Console.card, in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous).stroke(Console.outline, lineWidth: 0.5))
     }
 
     // MARK: screenshots and the trailer
@@ -182,7 +182,7 @@ struct PlayAppDetailSheet: View {
                                     .foregroundStyle(.white, .black.opacity(0.35))
                             }
                             .frame(width: height * 16 / 9, height: height)
-                            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                            .clipShape(RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
                         }
                         .buttonStyle(CardButtonStyle())
                     }
@@ -194,8 +194,8 @@ struct PlayAppDetailSheet: View {
                                 if let image = phase.image { image.resizable().scaledToFill() } else { Console.card }
                             }
                             .frame(width: height * CGFloat(ratio), height: height)
-                            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Console.outline, lineWidth: 0.5))
+                            .clipShape(RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
+                            .overlay(RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous).stroke(Console.outline, lineWidth: 0.5))
                         }
                         .buttonStyle(CardButtonStyle())
                     }
@@ -222,7 +222,7 @@ struct PlayAppDetailSheet: View {
             }
             .padding(14)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Console.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .background(Console.card, in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
         }
     }
 
@@ -285,8 +285,8 @@ struct PlayAppDetailSheet: View {
                 linkRow("Privacy policy", "hand.raised", URL(string: app.privacy))
                 linkRow("View on Google Play", "arrow.up.right.square", playURL, last: true)
             }
-            .background(Console.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Console.outline, lineWidth: 0.5))
+            .background(Console.card, in: RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: Theme.Curve.tile, style: .continuous).stroke(Console.outline, lineWidth: 0.5))
         }
     }
 

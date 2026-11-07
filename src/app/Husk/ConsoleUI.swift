@@ -12,14 +12,20 @@ enum Console {
         Color(uiColor: UIColor { $0.userInterfaceStyle == .dark ? dark : light })
     }
 
-    /// The page: Husk's deep navy, or near-white.
-    static let page = adaptive(dark: UIColor(red: 0.035, green: 0.047, blue: 0.098, alpha: 1), light: UIColor(white: 0.965, alpha: 1))
-    /// Cards and wells on the page.
-    static let card = adaptive(dark: UIColor(red: 0.075, green: 0.094, blue: 0.161, alpha: 1), light: UIColor(white: 0.905, alpha: 1))
-    /// One step up from a card: buttons beside Play.
-    static let raised = adaptive(dark: UIColor(red: 0.110, green: 0.133, blue: 0.220, alpha: 1), light: UIColor(white: 0.865, alpha: 1))
-    /// A card's outline on the navy page.
-    static let outline = adaptive(dark: UIColor(red: 0.20, green: 0.24, blue: 0.40, alpha: 0.55), light: UIColor(white: 0, alpha: 0.06))
+    /// The page: Husk's deep navy, or the system's grouped grey.
+    static let pageUI = UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0.031, green: 0.039, blue: 0.086, alpha: 1)
+                                                                : UIColor(red: 0.949, green: 0.949, blue: 0.969, alpha: 1) }
+    static let page = Color(uiColor: pageUI)
+    /// Cards and wells on the page: lifted off the navy in dark, white on the grey in light (they were darker than the
+    /// page in light, which read as dirty rather than raised).
+    static let cardUI = UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0.090, green: 0.110, blue: 0.188, alpha: 1)
+                                                                : .white }
+    static let card = Color(uiColor: cardUI)
+    /// One step up from a card: buttons beside Play, wells inside a card.
+    static let raised = adaptive(dark: UIColor(red: 0.137, green: 0.161, blue: 0.267, alpha: 1),
+                                 light: UIColor(red: 0.925, green: 0.929, blue: 0.957, alpha: 1))
+    /// A card's outline: enough to see the curve on the navy, a whisper on white.
+    static let outline = adaptive(dark: UIColor(red: 0.42, green: 0.48, blue: 0.75, alpha: 0.30), light: UIColor(white: 0, alpha: 0.07))
     /// An unselected chip.
     static let chip = adaptive(dark: UIColor(white: 1, alpha: 0.12), light: UIColor(white: 0, alpha: 0.07))
     static let hairline = adaptive(dark: UIColor(white: 1, alpha: 0.08), light: UIColor(white: 0, alpha: 0.08))

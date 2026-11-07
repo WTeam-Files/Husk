@@ -264,9 +264,9 @@ struct StoreView: View {
             }
             .frame(height: 180)
             .frame(maxWidth: .infinity)
-            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).stroke(Console.outline, lineWidth: 0.5))
-            .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous).stroke(Console.outline, lineWidth: 0.5))
+            .contentShape(RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous))
         }
         .buttonStyle(CardButtonStyle())
     }
@@ -293,7 +293,7 @@ struct StoreView: View {
                 if let image = phase.image { image.resizable().scaledToFill() } else { Console.raised }
             }
             .frame(width: 104, height: 104)
-            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous))
             .overlay { if busy { ProgressView().tint(.white) } }
             Text(title).font(.system(size: 13, weight: .semibold)).foregroundStyle(Console.text).lineLimit(1)
             HStack(spacing: 4) {
@@ -390,7 +390,7 @@ struct StoreView: View {
                         }
                     }
                     .frame(width: 52, height: 52)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: Theme.Curve.small, style: .continuous))
 
                     VStack(alignment: .leading, spacing: 3) {
                         Text(app.title)

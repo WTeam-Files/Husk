@@ -437,7 +437,7 @@ struct GuestScreenView: View {
                         .multilineTextAlignment(.center)
                 }
                 .padding(.horizontal, 18).padding(.vertical, 14)
-                .huskPanel(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .huskPanel(RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
                 .frame(maxWidth: 300)
                 // Below the Back/keyboard/console pill rather than centred over
                 // the guest: the ZStack is top-aligned, so without this the card
@@ -464,8 +464,7 @@ struct GuestScreenView: View {
                     if keyboard {
                         SpecialKeysBar()
                             .padding(.horizontal, 10).padding(.vertical, 8)
-                            .huskPanel(RoundedRectangle(cornerRadius: 14,
-                                                        style: .continuous))
+                            .huskPanel(RoundedRectangle(cornerRadius: Theme.Curve.control, style: .continuous))
                     }
 
                     HStack(spacing: 2) {
@@ -692,7 +691,7 @@ struct ControlsSheet: View {
                 .foregroundStyle(available ? Theme.text : Theme.textDim.opacity(0.6))
                 .frame(width: 34, height: 34)
                 .background(Theme.surfaceHigh,
-                            in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                            in: RoundedRectangle(cornerRadius: Theme.Curve.small, style: .continuous))
             Text(title)
                 .font(.system(size: 15, weight: .medium))
                 .foregroundStyle(available ? Theme.text : Theme.textDim.opacity(0.6))
@@ -732,7 +731,7 @@ private struct AndroidStartWarning: View {
         }
         .padding(22)
         .frame(maxWidth: 360)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: Theme.Curve.card, style: .continuous))
         .padding(.horizontal, 28)
         .task {
             while wait > 0 {

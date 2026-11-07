@@ -118,15 +118,18 @@ struct DiscoverView: View {
         HStack(spacing: 14) {
             AsyncImage(url: URL(string: app.iconURL)) { phase in
                 if let image = phase.image {
-                    image.resizable().aspectRatio(contentMode: .fit)
-                } else if phase.error != nil {
-                    Image(systemName: "app.dashed").font(.title).foregroundStyle(.secondary)
+                    image.resizable().aspectRatio(contentMode: .fill)
+                } else if phase.error != nil || app.iconURL.isEmpty {
+                    Image(systemName: "app.dashed").font(.title2).foregroundStyle(.secondary)
                 } else {
                     ProgressView()
                 }
             }
-            .frame(width: 48, height: 48)
-            .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
+            .frame(width: 52, height: 52)
+            .background(Console.raised)
+            .clipShape(RoundedRectangle(cornerRadius: Theme.Curve.appIcon(52), style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: Theme.Curve.appIcon(52), style: .continuous)
+                        .strokeBorder(Console.outline, lineWidth: 0.5))
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(app.name).font(.body.weight(.medium)).lineLimit(1)
@@ -179,25 +182,28 @@ struct DiscoverView: View {
                     Text("Paste any F-Droid-compatible repository index URL.")
                 }
 
-                Section("Presets") {
-                    ForEach([
-                        ("F-Droid", "https://f-droid.org/repo/index-v1.json"),
-                        ("IzzyOnDroid", "https://apt.izzysoft.de/fdroid/repo/index-v1.json"),
-                        ("Guardian Project", "https://guardianproject.info/fdroid/repo/index-v1.json"),
-                    ], id: \.0) { name, url in
-                        Button { newSourceURL = url } label: {
-                            HStack {
+                Section {
+                    ForEach(manager.known) { known in
+                        Button {
+                            if manager.isAdded(known) { return }
+                            Task { await manager.addSource(urlString: known.url) }
+                        } label: {
+                            HStack(spacing: 12) {
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(name).foregroundStyle(.primary)
-                                    Text(url).font(.caption2).foregroundStyle(.secondary).lineLimit(1)
+                                    Text(known.name).foregroundStyle(.primary)
+                                    Text(known.description).font(.caption).foregroundStyle(.secondary).lineLimit(2)
                                 }
                                 Spacer()
-                                if newSourceURL == url {
-                                    Image(systemName: "checkmark").foregroundStyle(Color.accentColor)
-                                }
+                                Image(systemName: manager.isAdded(known) ? "checkmark.circle.fill" : "plus.circle")
+                                    .font(.system(size: 20))
+                                    .foregroundStyle(manager.isAdded(known) ? Color.green : Color.accentColor)
                             }
                         }
                     }
+                } header: {
+                    Text("Known Repositories")
+                } footer: {
+                    Text("Husk adds new known repositories by itself. Remove one in Manage Repositories and it stays removed.")
                 }
             }
             .navigationTitle("Add Source")
@@ -237,7 +243,7 @@ struct DiscoverView: View {
                         }
                         .padding(.vertical, 2)
                     }
-                    .onDelete { manager.sourceURLs.remove(atOffsets: $0) }
+                    .onDelete { manager.removeSources(atOffsets: $0) }
                 } header: { Text("Active Repositories") }
             }
             .navigationTitle("Repositories")
